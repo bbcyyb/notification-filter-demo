@@ -1,10 +1,12 @@
 package com.dellemc.katalist.notificationfilter.base;
 
-import com.dellemc.katalist.notificationfilter.job.AbstractJobHandler;
+import com.dellemc.katalist.notificationfilter.Context;
+import com.dellemc.katalist.notificationfilter.job.JobChainHandler;
 import com.dellemc.katalist.notificationfilter.job.JobStatus;
+
 import java.util.concurrent.Callable;
 
-public abstract class Filter extends AbstractJobHandler implements Base, Callable<JobStatus>, Comparable<Filter> {
+public abstract class Filter extends JobChainHandler implements Job, Callable<JobStatus>, Comparable<Filter> {
     private int priority = 0;
 
     public int getPriority() {
@@ -17,5 +19,9 @@ public abstract class Filter extends AbstractJobHandler implements Base, Callabl
 
     public int compareTo(Filter filter) {
         return getPriority() - filter.getPriority();
+    }
+
+    public void process(Context context) {
+        handle(context);
     }
 }
