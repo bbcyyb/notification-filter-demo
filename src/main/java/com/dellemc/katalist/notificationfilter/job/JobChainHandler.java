@@ -31,7 +31,7 @@ public abstract class JobChainHandler {
 
     public void handle(Map<String, Object> event, Context context) {
         try {
-            doHandle(event, context);
+            doHandle(event, context, (nextHandler == null));
         } catch (Exception ex) {
             logger.error("Error occur, start to rollback logic, Exception from " + this.getClass().getName() + " - exiting: " + ex.getMessage());
             rollBack(event, context);
@@ -50,7 +50,7 @@ public abstract class JobChainHandler {
         }
     }
 
-    protected abstract void doHandle(Map<String, Object> event, Context context) throws Exception;
+    protected abstract void doHandle(Map<String, Object> event, Context context, boolean lastOne) throws Exception;
 
     protected abstract void doRollBack(Map<String, Object> event, Context context);
 }

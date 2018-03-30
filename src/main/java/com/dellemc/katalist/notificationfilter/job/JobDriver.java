@@ -30,16 +30,16 @@ public class JobDriver {
     }
 
     private Tuple2<JobChainHandler, JobChainHandler> generateJobChain(List<? extends JobChainHandler> list) {
-        JobChainHandler start = null, current = null;
+        JobChainHandler start = null, end = null;
         for (JobChainHandler job : list) {
             if (start == null) {
-                start = current = job;
+                start = end = job;
             } else {
-                current.setNextHandler(job);
-                current = job;
+                end.setNextHandler(job);
+                end = job;
             }
         }
-        return new Tuple2<>(start, current);
+        return new Tuple2<>(start, end);
     }
 
     public void init() {
