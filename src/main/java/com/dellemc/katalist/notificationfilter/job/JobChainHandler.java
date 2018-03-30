@@ -4,6 +4,8 @@ import com.dellemc.katalist.notificationfilter.Context;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
 public abstract class JobChainHandler {
     private JobChainHandler preHandler;
     private JobChainHandler nextHandler;
@@ -27,28 +29,28 @@ public abstract class JobChainHandler {
         return nextHandler;
     }
 
-    public void handle(Context context) {
+    public void handle(Map<String, Object> event, Context context) {
         try {
-            doHandle(context);
+            doHandle(event, context);
         } catch (Exception ex) {
             logger.error("Error occur, start to rollback logic, Exception from " + this.getClass().getName() + " - exiting: " + ex.getMessage());
-            rollBack(context);
+            rollBack(event, context);
             return;
         }
         if (nextHandler != null) {
-            nextHandler.handle(context);
+            nextHandler.handle(event, context);
         }
     }
 
-    public void rollBack(Context context) {
-        doRollBack(context);
+    public void rollBack(Map<String, Object> event, Context context) {
+        doRollBack(event, context);
 
         if (preHandler != null) {
-            preHandler.rollBack(context);
+            preHandler.rollBack(event, context);
         }
     }
 
-    protected abstract void doHandle(Context context) throws Exception;
+    protected abstract void doHandle(Map<String, Object> event, Context context) throws Exception;
 
-    protected abstract void doRollBack(Context context);
+    protected abstract void doRollBack(Map<String, Object> event, Context context);
 }

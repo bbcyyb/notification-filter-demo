@@ -1,5 +1,6 @@
 package com.dellemc.katalist.notificationfilter.input;
 
+import com.dellemc.katalist.notificationfilter.Context;
 import com.dellemc.katalist.notificationfilter.base.Input;
 
 import java.util.*;
@@ -9,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.dellemc.katalist.notificationfilter.decoder.Decode;
 import com.dellemc.katalist.notificationfilter.decoder.PlainDecoder;
+import com.dellemc.katalist.notificationfilter.job.JobStatusEnum;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -36,8 +38,8 @@ public class KafkaInput extends Input {
     }
 
     @Override
-    protected void doProcess(Map<String, Object> event) {
-        this.getFilterProcessor().process();
+    protected void doProcess(Map<String, Object> event, Context context) {
+        this.getFilterProcessor().process(event, context);
     }
 
     @Override
@@ -50,7 +52,7 @@ public class KafkaInput extends Input {
             int threadSize = partitionSize < threadSettingSize ? partitionSize : threadSettingSize;
             executor = Executors.newFixedThreadPool(threadSize);
             for (int i = 0; i < threadSize; i++) {
-                ConsumerThread thread = new ConsumerThread(topic, props, this);
+                ConsumerThread thread = new ConsumerThread(topic, props);
                 consumerThreadsList.add(thread);
                 executor.submit(thread);
             }
@@ -68,27 +70,33 @@ public class KafkaInput extends Input {
         }
     }
 
+    private Context generateContext(long lastCommittedOffset, int partition) {
+        return new Context(lastCommittedOffset, JobStatusEnum.Created, partition);
+    }
+
     private class ConsumerThread implements Runnable {
 
         private KafkaConsumer<String, String> consumer;
         private Decode decoder;
 
-        public ConsumerThread(String topicName, Properties props, KafkaInput kafka) {
+        public ConsumerThread(String topicName, Properties props) {
             consumer = new KafkaConsumer<>(props);
-            initConsumerThread(props, kafka);
-            this.consumer.subscribe(Arrays.asList(topicName));
+            initConsumerThread(props);
+            consumer.subscribe(Arrays.asList(topicName));
             decoder = new PlainDecoder();
         }
 
-        public void initConsumerThread(Properties prop, KafkaInput kafka) {
-            this.consumer = new KafkaConsumer<>(props);
+        public void initConsumerThread(Properties props) {
+            consumer = new KafkaConsumer<>(props);
         }
 
         public void run() {
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(10000);
-                for (ConsumerRecord<String, String> record : records)
-                    process(decoder, record.value());
+                for (ConsumerRecord<String, String> record : records) {
+                    Context context = generateContext(record.offset(), record.partition());
+                    process(decoder, record.value(), context);
+                }
             }
         }
 

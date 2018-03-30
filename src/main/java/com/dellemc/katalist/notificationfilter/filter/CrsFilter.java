@@ -4,24 +4,21 @@ import com.dellemc.katalist.notificationfilter.Context;
 import com.dellemc.katalist.notificationfilter.base.Filter;
 import com.dellemc.katalist.notificationfilter.job.JobStatus;
 
+import java.util.Map;
+
 public class CrsFilter extends Filter {
+    @Override
+    protected void doProcess(Map<String, Object> event, Context context) {
+
+    }
+
     @Override
     public void shutdown() {
 
     }
 
     @Override
-    protected void doHandle(Context context) throws Exception {
+    protected void doRollBack(Map<String, Object> event, Context context) {
 
-    }
-
-    @Override
-    protected void doRollBack(Context context) {
-
-    }
-
-    @Override
-    public JobStatus call() throws Exception {
-        return null;
     }
 }
