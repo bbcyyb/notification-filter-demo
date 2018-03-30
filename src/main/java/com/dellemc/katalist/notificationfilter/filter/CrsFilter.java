@@ -12,7 +12,7 @@ import java.util.Properties;
 
 public class CrsFilter extends Filter {
 
-    private final String crsUrl = "10.52.59.194";
+    private final String host = "10.52.59.194";
     private Properties props;
     private final int numOfRetries = 3;
 
@@ -24,20 +24,21 @@ public class CrsFilter extends Filter {
 
     @Override
     protected void doProcess(Map<String, Object> event, Context context, boolean lastOne) {
-        HttpRequest request = new HttpRequest(crsUrl, props);
+        /*
+        HttpRequest request = new HttpRequest(host, props);
         for (int i = 0; i < numOfRetries; i++) {
             Tuple2<String, Integer> t = request.get();
             if (t._2() < 300 && t._2() >= 200) {
-                boolean passed = context.getFilterStatus().isPassed() || (t._1().toUpperCase() == "TRUE");
+                boolean passed = context.getFilterStatus().isPassed() || (t._1().toUpperCase().equals("TRUE"));
                 context.getFilterStatus().setPassed(passed);
                 break;
             }
         }
-
+        */
+        context.getFilterStatus().setPassed(true);
         if(lastOne && context.getFilterStatus().isPassed()) {
-            // TODO: async call output module
             List<Output> outputProcessors = getOutputProcessors();
-            outputProcessors.stream().forEach(o -> {
+            outputProcessors.parallelStream().forEach(o -> {
                 o.process(event, context);
             });
         }
