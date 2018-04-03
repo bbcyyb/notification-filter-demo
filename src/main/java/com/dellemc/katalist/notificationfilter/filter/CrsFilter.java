@@ -16,15 +16,13 @@ public class CrsFilter extends Filter {
     private Properties props;
     private final int numOfRetries = 3;
 
-    public CrsFilter() {
-        super();
-        props = new Properties();
-        props.setProperty("Accept", "application/json");
-    }
-
     @Override
     protected void doProcess(Map<String, Object> event, Context context, boolean lastOne) {
         /*
+        query string: component=CPU
+        cpu_usage > 90
+        True else False
+
         HttpRequest request = new HttpRequest(host, props);
         for (int i = 0; i < numOfRetries; i++) {
             Tuple2<String, Integer> t = request.get();
@@ -36,16 +34,20 @@ public class CrsFilter extends Filter {
         }
         */
         context.getFilterStatus().setPassed(true);
-        if(lastOne && context.getFilterStatus().isPassed()) {
+        if (lastOne && context.getFilterStatus().isPassed()) {
             List<Output> outputProcessors = getOutputProcessors();
-            outputProcessors.parallelStream().forEach(o -> {
-                o.process(event, context);
-            });
+            outputProcessors.parallelStream().forEach(o -> o.process(event, context));
         }
     }
 
     @Override
-    public void shutdown() {
+    public void init() {
+        props = new Properties();
+        props.setProperty("Accept", "application/json");
+    }
+
+    @Override
+    public void dispose() {
 
     }
 

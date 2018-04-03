@@ -1,23 +1,24 @@
 package com.dellemc.katalist.notificationfilter.base;
 
 import com.dellemc.katalist.notificationfilter.Context;
+
 import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class Output implements Job {
 
-    @Override
-    public void shutdown() {
-
-    }
+    protected Logger logger = LoggerFactory.getLogger(Thread.currentThread().getStackTrace()[1].getClassName());
 
     public void process(Map<String, Object> event, Context context) {
         try {
             doProcess(event, context);
-        } catch (OutOfMemoryError e) {
-            e.printStackTrace();
+        } catch (OutOfMemoryError ex) {
+            logger.error("OutOfMemoryError: ", ex);
             System.exit(1);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            logger.error("Exception: ", ex);
         }
     }
 

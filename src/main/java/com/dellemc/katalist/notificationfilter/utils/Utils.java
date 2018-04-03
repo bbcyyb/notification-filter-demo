@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 public class Utils {
 
-    private static Logger logger = LoggerFactory.getLogger(Utils.class);
+    private static Logger logger = LoggerFactory.getLogger(Thread.currentThread().getStackTrace()[1].getClassName());
 
     private static <T extends Job> List<T> createProcessors(Class<T> clazz) {
         List<T> result = new ArrayList<>();
@@ -24,10 +24,10 @@ public class Utils {
             logger.info("begin to build processor " + subClass.getSimpleName());
             try {
                 Constructor<?> ctor = subClass.getConstructor();
-                logger.info("build " + subClass.getSimpleName() + " done");
+                logger.debug("build " + subClass.getSimpleName() + " done");
                 result.add((T) ctor.newInstance());
             } catch (Exception ex) {
-                ex.printStackTrace();
+                logger.error("Exception: ", ex);
                 System.exit(1);
             }
         });

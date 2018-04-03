@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import com.dellemc.katalist.notificationfilter.decoder.Decode;
+import com.dellemc.katalist.notificationfilter.decoder.JsonDecoder;
 import com.dellemc.katalist.notificationfilter.decoder.PlainDecoder;
 import com.dellemc.katalist.notificationfilter.job.JobStatusEnum;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -23,14 +24,13 @@ public class KafkaInput extends Input {
     private ArrayList<ConsumerThread> consumerThreadsList;
 
     @Override
-    protected void init() {
+    public void init() {
         topics = new HashMap<>();
-        topics.put("test1", 1);
-        topics.put("test2", 4);
-        topics.put("test3", 6);
+        topics.put("event0", 1);
 
         props = new Properties();
         props.setProperty("bootstrap.servers", "10.62.59.210:9092");
+        props.setProperty("group.id", "subscriber");
         props.setProperty("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
         props.setProperty("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer");
 
@@ -60,13 +60,13 @@ public class KafkaInput extends Input {
     }
 
     @Override
-    public void shutdown() {
-        consumerThreadsList.forEach(consumerThread -> consumerThread.shutdown());
+    public void dispose() {
+        consumerThreadsList.forEach(consumerThread -> consumerThread.dispose());
         executor.shutdown();
         try {
             executor.awaitTermination(5000, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        } catch (InterruptedException ex) {
+            logger.error("InterruptedException: ", ex);
         }
     }
 
@@ -83,7 +83,7 @@ public class KafkaInput extends Input {
             consumer = new KafkaConsumer<>(props);
             initConsumerThread(props);
             consumer.subscribe(Arrays.asList(topicName));
-            decoder = new PlainDecoder();
+            decoder = new JsonDecoder();
         }
 
         public void initConsumerThread(Properties props) {
@@ -100,7 +100,7 @@ public class KafkaInput extends Input {
             }
         }
 
-        public void shutdown() {
+        public void dispose() {
             consumer.wakeup();
             consumer.close();
         }

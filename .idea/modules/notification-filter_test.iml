@@ -9,27 +9,31 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Gradle: joda-time:joda_time:2.8.2" level="project" />
+    <orderEntry type="module" module-name="notification-filter_main" />
     <orderEntry type="library" name="Gradle: org.apache.kafka:kafka_2.11:0.9.0.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.xerial.snappy:snappy-java:1.1.1.7" level="project" />
-    <orderEntry type="library" name="Gradle: org.scala-lang:scala-library:2.11.7" level="project" />
-    <orderEntry type="library" name="Gradle: org.scala-lang.modules:scala-parser-combinators_2.11:1.0.4" level="project" />
-    <orderEntry type="library" name="Gradle: net.sf.jopt-simple:jopt-simple:3.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-log4j12:1.7.6" level="project" />
-    <orderEntry type="library" name="Gradle: org.apache.zookeeper:zookeeper:3.4.6" level="project" />
-    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.6" level="project" />
-    <orderEntry type="library" name="Gradle: log4j:log4j:1.2.17" level="project" />
-    <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" name="Gradle: joda-time:joda-time:2.9.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.clerezza.ext:org.json.simple:0.4" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-slf4j-impl:2.11.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-core:2.11.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-api:2.11.0" level="project" />
     <orderEntry type="library" name="Gradle: com.101tec:zkclient:0.7" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.kafka:kafka-clients:0.9.0.1" level="project" />
     <orderEntry type="library" name="Gradle: com.yammer.metrics:metrics-core:2.2.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.scala-lang.modules:scala-xml_2.11:1.0.4" level="project" />
-    <orderEntry type="library" name="Gradle: io.netty:netty:3.7.0.Final" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.zookeeper:zookeeper:3.4.6" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-log4j12:1.7.6" level="project" />
+    <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.8.0-alpha2" level="project" />
     <orderEntry type="library" name="Gradle: jline:jline:0.9.94" level="project" />
-    <orderEntry type="library" name="Gradle: net.jpountz.lz4:lz4:1.2.0" level="project" />
     <orderEntry type="library" name="Gradle: junit:junit:4.12" level="project" />
-    <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-core:2.6.2" level="project" />
-    <orderEntry type="library" name="Gradle: org.apache.logging.log4j:log4j-api:2.6.2" level="project" />
+    <orderEntry type="library" name="Gradle: org.scala-lang.modules:scala-xml_2.11:1.0.4" level="project" />
+    <orderEntry type="library" name="Gradle: org.scala-lang.modules:scala-parser-combinators_2.11:1.0.4" level="project" />
+    <orderEntry type="library" name="Gradle: org.scala-lang:scala-library:2.11.7" level="project" />
+    <orderEntry type="library" name="Gradle: net.sf.jopt-simple:jopt-simple:3.2" level="project" />
+    <orderEntry type="library" name="Gradle: com.googlecode.json-simple:json-simple:1.1" level="project" />
+    <orderEntry type="library" name="Gradle: org.hamcrest:hamcrest-core:1.3" level="project" />
+    <orderEntry type="library" name="Gradle: log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="library" name="Gradle: org.xerial.snappy:snappy-java:1.1.1.7" level="project" />
+    <orderEntry type="library" name="Gradle: net.jpountz.lz4:lz4:1.2.0" level="project" />
+    <orderEntry type="library" name="Gradle: io.netty:netty:3.7.0.Final" level="project" />
   </component>
   <component name="TestModuleProperties" production-module="notification-filter_main" />
 </module>

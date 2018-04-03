@@ -12,8 +12,14 @@ import java.util.Set;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 public class ClassUtils {
+
+    public static Logger logger = LoggerFactory.getLogger(Thread.currentThread().getStackTrace()[1].getClassName());
+
     public static Set<Class<?>> getClasses(String pack) {
 
         Set<Class<?>> classes = new LinkedHashSet<>();
@@ -27,7 +33,7 @@ public class ClassUtils {
                 URL url = dirs.nextElement();
                 String protocol = url.getProtocol();
                 if ("file".equals(protocol)) {
-                    System.err.println("scan file type.");
+                    logger.debug("scan file type.");
                     String filePath = URLDecoder.decode(url.getFile(), "UTF-8");
                     findAndAddClassesInPackageByFile(packageName, filePath, recursive, classes);
                 } else if ("jar".equals(protocol)) {
@@ -51,20 +57,20 @@ public class ClassUtils {
                                         String className = name.substring(packageName.length() + 1, name.length() - 6);
                                         try {
                                             classes.add(Class.forName(packageName + '.' + className));
-                                        } catch (ClassNotFoundException e) {
-                                            e.printStackTrace();
+                                        } catch (ClassNotFoundException ex) {
+                                            logger.error("ClassNotFoundException: ", ex);
                                         }
                                     }
                                 }
                             }
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    } catch (IOException ex) {
+                        logger.error("IOException: ", ex);
                     }
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            logger.error("IOException: ", ex);
         }
 
         return classes;
@@ -83,11 +89,12 @@ public class ClassUtils {
                         classes);
             } else {
                 String className = file.getName().substring(0, file.getName().length() - 6);
+                className = className.split("\\$")[0];
                 try {
                     classes.add(
                             Thread.currentThread().getContextClassLoader().loadClass(packageName + '.' + className));
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                } catch (ClassNotFoundException ex) {
+                    logger.error("ClassNotFoundException: ", ex);
                 }
             }
         }
@@ -109,8 +116,8 @@ public class ClassUtils {
                         }
                     }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                logger.error("Exception: ", ex);
             }
         }
         return classes;

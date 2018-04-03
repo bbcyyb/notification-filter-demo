@@ -46,9 +46,13 @@ public class JobDriver {
         inputList = createInputProcessors();
         filterList = createFilterProcessors();
         outputList = createOutputProcessors();
+        inputList.stream().forEach(Job::init);
+        filterList.stream().forEach(Job::init);
+        outputList.stream().forEach(Job::init);
+
         Collections.sort(filterList);
         Tuple2<JobChainHandler, JobChainHandler> t2 = generateJobChain(filterList);
-        Filter filterChainStart =  (Filter) t2._1();
+        Filter filterChainStart = (Filter) t2._1();
         Filter filterChainEnd = (Filter) t2._2();
         filterChainEnd.setOutputProcessors(outputList);
         inputList.stream().forEach(input -> input.setFilterProcessor(filterChainStart));
@@ -59,7 +63,8 @@ public class JobDriver {
     }
 
     public void stopAll() {
-        inputList.stream().forEach(Job::shutdown);
-
+        inputList.stream().forEach(Job::dispose);
+        filterList.stream().forEach(Job::dispose);
+        outputList.stream().forEach(Job::dispose);
     }
 }
