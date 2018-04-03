@@ -5,8 +5,11 @@ import com.dellemc.katalist.notificationfilter.job.JobChainHandler;
 
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class Filter extends JobChainHandler implements Job, Comparable<Filter> {
+    protected Logger logger = LoggerFactory.getLogger(Thread.currentThread().getStackTrace()[1].getClassName());
     private int priority = 0;
     private List<Output> outputProcessors;
 

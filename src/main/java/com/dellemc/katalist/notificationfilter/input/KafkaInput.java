@@ -91,6 +91,7 @@ public class KafkaInput extends Input {
         }
 
         public void run() {
+            topics.forEach((topic, partition) -> logger.info("Start listening Kafka Topic {}, partition {} ....", topic, partition));
             while (true) {
                 ConsumerRecords<String, String> records = consumer.poll(10000);
                 for (ConsumerRecord<String, String> record : records) {

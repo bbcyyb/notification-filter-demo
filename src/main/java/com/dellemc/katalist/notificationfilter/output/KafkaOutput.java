@@ -36,7 +36,7 @@ public class KafkaOutput extends Output {
     @Override
     protected void doProcess(Map<String, Object> event, Context context) {
         String value = generateMessage(event, context);
-        logger.debug("Send message \"{}\" to topic [{}]", value, topic);
+        logger.info("Start sending message \"{}\" to topic [{}] ....", value, topic);
         ProducerRecord<String, String> message = new ProducerRecord<>(topic, value);
         producer.send(message);
     }

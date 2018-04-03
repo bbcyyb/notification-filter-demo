@@ -18,6 +18,7 @@ public class CrsFilter extends Filter {
 
     @Override
     protected void doProcess(Map<String, Object> event, Context context, boolean lastOne) {
+        logger.info("Start calling CRS server to filter event ....");
         /*
         query string: component=CPU
         cpu_usage > 90
