@@ -5,11 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Main {
-
     private static final String KAFKA_CONSUMER_SHUTDOWN_THREAD = "kafka-indexer-shutdown-thread";
-    private static Logger logger = LoggerFactory.getLogger(Thread.currentThread().getStackTrace()[1].getClassName());
 
     public static void main(String[] args) {
+        Logger logger = LoggerFactory.getLogger(Main.class);
         logger.info("Filter start ....");
 
         JobDriver driver = new JobDriver();

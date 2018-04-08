@@ -21,6 +21,9 @@ public class Utils {
         Set<Class<?>> subClassSet = ClassUtils.getClasses(packageName);
 
         subClassSet.forEach(subClass -> {
+            if (subClass.getName().contains("$")) {
+                return;
+            }
             logger.info("begin to build processor " + subClass.getSimpleName());
             try {
                 Constructor<?> ctor = subClass.getConstructor();

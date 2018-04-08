@@ -1,5 +1,5 @@
 group 'com.dell.katalist'
-version '1.0-SNAPSHOT'
+version '0.1'
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -9,14 +9,28 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
 }
-
 /*
 jar {
     manifest {
-        attributes 'Main_Class': 'com.dellemc.katalist.notificationfilter.Main'
+        attributes(
+                "Manifest-Version": 0.1,
+                "Main-Class": "com.dellemc.katalist.notificationfilter.Main",
+                "Class-Path": configurations.compile.collect { "lib/${it.name}" }.join(' '))
     }
 }
 */
+
+jar {
+    manifest {
+        attributes(
+                "Manifest-Version": 1.0,
+                "Main-Class": "com.dellemc.katalist.notificationfilter.Main")
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    into('assets') {
+        from 'assets'
+    }
+}
 
 dependencies {
     compile("org.apache.kafka:kafka_2.11:0.9.0.1")
